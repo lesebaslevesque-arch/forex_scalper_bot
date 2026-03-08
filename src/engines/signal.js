@@ -63,6 +63,7 @@ export function generateSignal({ cvd, candles, vwap, spreadPips, minScore = null
     return {
       direction: 'LONG',
       score: longScore,
+      longScore, shortScore,
       confidence: longScore / 7,
       details: { rsi, macd: macd?.hist, cvd: cvd.normalized, rejection, vwap },
     };
@@ -72,6 +73,7 @@ export function generateSignal({ cvd, candles, vwap, spreadPips, minScore = null
     return {
       direction: 'SHORT',
       score: shortScore,
+      longScore, shortScore,
       confidence: shortScore / 7,
       details: { rsi, macd: macd?.hist, cvd: cvd.normalized, rejection, vwap },
     };

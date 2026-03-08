@@ -59,4 +59,8 @@ export const oandaRest = {
   // Historique des trades
   getRecentTrades: (count = 20) =>
     request('GET', `/accounts/${config.oanda.accountId}/trades?count=${count}`),
+
+  // Détail d'un trade fermé par son ID
+  getClosedTrade: (tradeId) =>
+    request('GET', `/accounts/${config.oanda.accountId}/trades/${tradeId}`),
 };
