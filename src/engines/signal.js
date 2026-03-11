@@ -59,6 +59,17 @@ export function generateSignal({ cvd, candles, vwap, spreadPips, minScore = null
 
   const minScore_ = minScore ?? Math.round(config.indicators.minSignalStrength * 7);
 
+  // Filtrer les entrées où CVD contredit fortement la direction
+  const cvdNorm = cvd.normalized;
+  if (longScore >= minScore_ && longScore > shortScore && cvdNorm < -0.1) return null;
+  if (shortScore >= minScore_ && shortScore > longScore && cvdNorm > 0.1) return null;
+
+  // Bloquer si MACD fortement contre la direction (histogramme négatif + en baisse = tendance short)
+  if (macd) {
+    if (longScore >= minScore_  && longScore > shortScore  && macd.hist < -0.00005 && (macd.histDelta ?? 0) < 0) return null;
+    if (shortScore >= minScore_ && shortScore > longScore  && macd.hist >  0.00005 && (macd.histDelta ?? 0) > 0) return null;
+  }
+
   if (longScore >= minScore_ && longScore > shortScore) {
     return {
       direction: 'LONG',

@@ -15,12 +15,14 @@ import fs from 'fs';
  */
 
 // ── Bras disponibles ─────────────────────────────────────────
+// Ratio TP/SL minimum 2.5:1 pour compenser le spread practice (~1.8p)
+// WR requise avec ratio 2.5:1 = SL/(SL+TP) = ~29% → atteignable
 export const ARMS = [
-  { id: 0, name: 'scalp-agressif',   cvdWindowMs: 3 * 60_000, minScore: 4, stopLossPips: 4, takeProfitPips: 6  },
-  { id: 1, name: 'baseline',         cvdWindowMs: 5 * 60_000, minScore: 4, stopLossPips: 5, takeProfitPips: 8  },
-  { id: 2, name: 'signal-conserv',   cvdWindowMs: 5 * 60_000, minScore: 5, stopLossPips: 5, takeProfitPips: 8  },
-  { id: 3, name: 'stops-larges',     cvdWindowMs: 7 * 60_000, minScore: 4, stopLossPips: 6, takeProfitPips: 10 },
-  { id: 4, name: 'ultra-tight',      cvdWindowMs: 3 * 60_000, minScore: 5, stopLossPips: 3, takeProfitPips: 5  },
+  { id: 0, name: 'conserv-3-1',    cvdWindowMs: 5 * 60_000, minScore: 5, stopLossPips: 5,  takeProfitPips: 15 },
+  { id: 1, name: 'baseline-2-5',   cvdWindowMs: 5 * 60_000, minScore: 5, stopLossPips: 6,  takeProfitPips: 15 },
+  { id: 2, name: 'tight-3-1',      cvdWindowMs: 3 * 60_000, minScore: 6, stopLossPips: 4,  takeProfitPips: 12 },
+  { id: 3, name: 'wide-2-5',       cvdWindowMs: 7 * 60_000, minScore: 5, stopLossPips: 8,  takeProfitPips: 20 },
+  { id: 4, name: 'score6-3-1',     cvdWindowMs: 5 * 60_000, minScore: 6, stopLossPips: 5,  takeProfitPips: 15 },
 ];
 
 // ── Sampling Beta via méthode Johnk ─────────────────────────

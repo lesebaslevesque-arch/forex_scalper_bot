@@ -110,7 +110,7 @@ async function onTick(tick) {
   lastRegime = regime;
   if (!regime.active) return;
 
-  if (pos.inPosition) return;
+  if (pos.inPosition || pos.isPlacing) return;
 
   // ── Sélection bras Thompson Sampling ─────────────────────
   if (!activeArm) {
@@ -139,8 +139,9 @@ async function onTick(tick) {
   );
 
   // ── Ordre ────────────────────────────────────────────────
+  pos.startPlacing();
   const fill = await placeOrder(signal.direction, activeArm);
-  if (!fill) return;
+  if (!fill) { pos.cancelPlacing(); return; }
 
   pos.enter({
     direction:      signal.direction,

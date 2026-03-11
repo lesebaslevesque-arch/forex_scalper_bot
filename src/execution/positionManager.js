@@ -8,10 +8,12 @@ export class PositionManager {
   constructor() {
     this._reset();
     this.lastPnlPips = null;
+    this._placing    = false;
   }
 
   _reset() {
     this.inPosition   = false;
+    this._placing     = false;
     this.direction    = null;
     this.entryPrice   = null;
     this.tradeId      = null;
@@ -20,14 +22,20 @@ export class PositionManager {
     this.takeProfitPips = null;
     this.arm          = null;
     this.armIndex     = null;
+    this.armParams    = null;
     this.spreadEntry  = null;
     this.regime       = null;
     this.signal       = null;
   }
 
+  get isPlacing() { return this._placing; }
+  startPlacing()  { this._placing = true; }
+  cancelPlacing() { this._placing = false; }
+
   enter({ direction, fillPrice, tradeId, stopLossPips, takeProfitPips,
-          arm, armIndex, spreadEntry, regime, signal }) {
+          arm, armIndex, armParams, spreadEntry, regime, signal }) {
     this.inPosition     = true;
+    this._placing       = false;
     this.direction      = direction;
     this.entryPrice     = fillPrice;
     this.tradeId        = tradeId;
@@ -36,6 +44,7 @@ export class PositionManager {
     this.takeProfitPips = takeProfitPips;
     this.arm            = arm;
     this.armIndex       = armIndex;
+    this.armParams      = armParams;
     this.spreadEntry    = spreadEntry;
     this.regime         = regime;
     this.signal         = signal;
@@ -99,7 +108,9 @@ export class PositionManager {
           // Détecter la raison (SL ou TP)
           if (trade?.stopLossOrder?.state === 'FILLED') exitReason = 'SL';
           else if (trade?.takeProfitOrder?.state === 'FILLED') exitReason = 'TP';
-        } catch {}
+        } catch (err) {
+          console.error('[POS] getClosedTrade error:', err.message);
+        }
 
         const record = await this._logAndExit(exitPrice, exitReason);
         return record;
